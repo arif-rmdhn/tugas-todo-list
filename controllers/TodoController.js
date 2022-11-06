@@ -48,7 +48,7 @@ TodoController.put("/updatetodo", async (req, res) => {
 });
 
 /**
- * Update Todo user
+ * Delete Todo user
  *
  * @param {number} user_id
  * @param {number} todo_id
