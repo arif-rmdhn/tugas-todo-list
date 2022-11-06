@@ -29,18 +29,49 @@ class _todo {
       }
    };
 
+   listlogin = async (body) => {
+      try {
+         const schema = Joi.object({
+            user_id: Joi.number()
+         });
+
+         validate(schema, body)
+
+         const list = await prisma.user.findMany({
+            where: {
+               id: body.user_id
+            },
+            include: {
+               todo: true,
+            },
+         });
+
+         return {
+            status: true,
+            data: list,
+         };
+      } catch (error) {
+         console.error("listTodo todo module Error: ", error);
+
+         return {
+            status: false,
+            error,
+         };
+      }
+   };
+
    creatTodo = async (body) => {
       try {
          // Validation Input
          const schema = Joi.object({
             user_id: Joi.number().required(),
             description: Joi.string().required(),
-         });
+         }).options({ abortEarly: false });
 
          const validation = schema.validate(body);
 
          if (validation.error) {
-            const errorDetail = validation.error.details.map((detail) => detail.mesaage);
+            const errorDetail = validation.error.details.map((detail) => detail.message);
 
             return {
                status: false,
